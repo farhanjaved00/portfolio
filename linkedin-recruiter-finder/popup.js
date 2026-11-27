@@ -12,6 +12,36 @@ async function save() {
   await chrome.storage.local.set({ [STORE_KEY]: all });
 }
 
+// Opens one recruiter's profile in a new tab and clicks LinkedIn's Follow button once.
+async function followOne(p) {
+  const tab = await chrome.tabs.create({ url: p.profileUrl, active: false });
+  await new Promise(resolve => {
+    const done = (id, info) => {
+      if (id === tab.id && info.status === "complete") {
+        chrome.tabs.onUpdated.removeListener(done);
+        resolve();
+      }
+    };
+    chrome.tabs.onUpdated.addListener(done);
+    setTimeout(resolve, 15000); // safety timeout
+  });
+  await new Promise(r => setTimeout(r, 1500)); // let LinkedIn render its buttons
+  let res;
+  try {
+    res = await chrome.tabs.sendMessage(tab.id, { type: "FOLLOW_PROFILE" });
+  } catch (err) {
+    res = { ok: false, error: err.message };
+  }
+  await chrome.tabs.remove(tab.id);
+  if (res && res.ok) {
+    p.followed = true;
+    p.followedAt = new Date().toISOString();
+    await save();
+    return res.status;
+  }
+  throw new Error(res && res.error || "Follow failed");
+}
+
 function visible() {
   const q = $("filter").value.trim().toLowerCase();
   const min = Number($("minScore").value) || 0;
@@ -41,7 +71,23 @@ function render() {
     const meta = document.createElement("div");
     meta.className = "meta";
     meta.textContent = p.location || "Location not shown";
-    li.append(a, head, meta);
+    const fb = document.createElement("button");
+    fb.className = "small";
+    fb.textContent = p.followed ? "Followed ✓" : "Follow";
+    fb.disabled = !!p.followed;
+    fb.addEventListener("click", async () => {
+      fb.disabled = true;
+      fb.textContent = "Following…";
+      try {
+        await followOne(p);
+        fb.textContent = "Followed ✓";
+      } catch (err) {
+        fb.disabled = false;
+        fb.textContent = "Follow";
+        $("status").textContent = "Could not follow " + p.name + ": " + err.message;
+      }
+    });
+    li.append(a, head, meta, fb);
     list.appendChild(li);
   }
   $("status").textContent = `${rows.length} shown · ${all.length} saved`;

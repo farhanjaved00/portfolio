@@ -73,7 +73,30 @@
     return results;
   }
 
+  // Clicks the profile's own "Follow" button once. Only runs when the user clicks
+  // Follow for a specific recruiter in the popup. Never loops or follows others.
+  function followThisProfile() {
+    if (!/linkedin\.com\/in\//.test(location.href)) {
+      return { ok: false, error: "Not a profile page" };
+    }
+    const buttons = Array.from(document.querySelectorAll("button"));
+    const already = buttons.some(b => clean(b.innerText) === "Following");
+    if (already) return { ok: true, status: "already-following" };
+    const btn = buttons.find(b => clean(b.innerText) === "Follow" || b.getAttribute("aria-label") === "Follow");
+    if (!btn) return { ok: false, error: "No Follow button found (profile may not allow following)" };
+    btn.click();
+    return { ok: true, status: "followed" };
+  }
+
   chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+    if (msg && msg.type === "FOLLOW_PROFILE") {
+      try {
+        sendResponse(followThisProfile());
+      } catch (err) {
+        sendResponse({ ok: false, error: String(err && err.message || err) });
+      }
+      return true;
+    }
     if (msg && msg.type === "SCAN_PAGE") {
       try {
         const onSearch = /linkedin\.com\/search\//.test(location.href);
