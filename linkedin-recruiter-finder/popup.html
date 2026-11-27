@@ -4,43 +4,87 @@
   <meta charset="utf-8">
   <title>LinkedIn Recruiter Finder</title>
   <style>
-    :root { --bg:#fff; --fg:#1b1f23; --muted:#65707a; --accent:#0a66c2; --line:#e3e7ec; }
+    :root { --bg:#fff; --fg:#1b1f23; --muted:#65707a; --accent:#0a66c2; --line:#e3e7ec; --card:#f6f8fa; }
     @media (prefers-color-scheme: dark) {
-      :root { --bg:#1d2226; --fg:#e8ecef; --muted:#9aa5ae; --accent:#70b5f9; --line:#363d44; }
+      :root { --bg:#1d2226; --fg:#e8ecef; --muted:#9aa5ae; --accent:#70b5f9; --line:#363d44; --card:#252b30; }
     }
-    body { margin:0; width:420px; font:13px/1.4 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
-    header { padding:12px 14px; border-bottom:1px solid var(--line); }
+    body { margin:0; width:440px; font:13px/1.4 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+    header { padding:12px 14px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
     h1 { font-size:15px; margin:0; }
-    .row { display:flex; gap:8px; padding:10px 14px; align-items:center; flex-wrap:wrap; }
-    input[type=text] { flex:1; min-width:160px; padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:transparent; color:var(--fg); }
-    button { padding:6px 10px; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; }
-    button.small { margin-top:6px; padding:3px 8px; font-size:12px; }
-    button:disabled { opacity:.5; cursor:default; }
+    .tabs { display:flex; gap:4px; padding:8px 14px 0; }
+    .tabs button { background:transparent; color:var(--muted); border:none; border-bottom:2px solid transparent; border-radius:0; padding:6px 8px; }
+    .tabs button.on { color:var(--accent); border-bottom-color:var(--accent); }
+    section { padding:10px 14px; }
+    .hidden { display:none; }
+    .row { display:flex; gap:8px; padding:6px 0; align-items:center; flex-wrap:wrap; }
+    input[type=text], input[type=number], select, textarea {
+      padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:transparent; color:var(--fg); font:inherit; }
+    input[type=text], textarea { flex:1; min-width:160px; }
+    textarea { width:100%; box-sizing:border-box; min-height:90px; }
+    button { padding:6px 10px; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; font:inherit; }
     button.ghost { background:transparent; color:var(--accent); }
+    button.small { padding:3px 8px; font-size:12px; }
+    button:disabled { opacity:.5; cursor:default; }
     .status { padding:0 14px 6px; color:var(--muted); min-height:16px; }
-    ul { list-style:none; margin:0; padding:0; max-height:380px; overflow:auto; }
-    li { padding:8px 14px; border-top:1px solid var(--line); }
+    ul { list-style:none; margin:0; padding:0; max-height:360px; overflow:auto; }
+    li { padding:8px 0; border-top:1px solid var(--line); }
     li a { color:var(--accent); font-weight:600; text-decoration:none; }
     .meta { color:var(--muted); font-size:12px; }
     .badge { display:inline-block; font-size:11px; padding:1px 6px; border-radius:10px; background:var(--line); margin-left:4px; }
+    .actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; align-items:center; }
+    .note { width:100%; box-sizing:border-box; margin-top:6px; font-size:12px; }
+    label.lbl { color:var(--muted); font-size:12px; display:block; margin-top:8px; }
     footer { padding:8px 14px; font-size:11px; color:var(--muted); border-top:1px solid var(--line); }
   </style>
 </head>
 <body>
-  <header><h1>LinkedIn Recruiter Finder</h1></header>
+  <header><h1>LinkedIn Recruiter Finder</h1><span class="meta" id="count"></span></header>
 
-  <div class="row">
-    <input id="filter" type="text" placeholder="Filter by country / city (e.g. India, London, Remote)">
-    <label class="meta"><input id="minScore" type="number" min="0" max="10" value="1" style="width:46px"> min score</label>
+  <div class="tabs">
+    <button id="tabList" class="on">Recruiters</button>
+    <button id="tabMsg">Message</button>
+    <button id="tabSettings">Settings</button>
   </div>
-  <div class="row">
-    <button id="scan">Scan this LinkedIn page</button>
-    <button id="csv" class="ghost">Export CSV</button>
-    <button id="clear" class="ghost">Clear</button>
-  </div>
-  <div id="status" class="status">Open a LinkedIn People search, then click Scan.</div>
-  <ul id="list"></ul>
-  <footer>Reads only the page you are viewing. Results stay in this browser.</footer>
+
+  <!-- Recruiters tab -->
+  <section id="paneList">
+    <div class="row">
+      <input id="filter" type="text" placeholder="Filter: country, city, headline">
+    </div>
+    <div class="row">
+      <label class="meta">Min score <input id="minScore" type="number" min="0" max="10" value="1" style="width:46px"></label>
+      <select id="statusFilter">
+        <option value="">All statuses</option>
+        <option>New</option><option>Contacted</option><option>Replied</option><option>Not interested</option>
+      </select>
+    </div>
+    <div class="row">
+      <button id="scan">Scan this page</button>
+      <button id="csv" class="ghost">Export CSV</button>
+      <button id="clear" class="ghost">Clear</button>
+    </div>
+    <div id="status" class="status">Open a LinkedIn People search, then click Scan.</div>
+    <ul id="list"></ul>
+  </section>
+
+  <!-- Message tab -->
+  <section id="paneMsg" class="hidden">
+    <label class="lbl">Outreach template. Use {name}, {headline}, {location}. You paste it into LinkedIn yourself.</label>
+    <textarea id="template"></textarea>
+    <div class="row"><button id="saveTemplate" class="ghost">Save template</button></div>
+    <label class="lbl">Preview for the first recruiter in your list</label>
+    <textarea id="preview" readonly></textarea>
+  </section>
+
+  <!-- Settings tab -->
+  <section id="paneSettings" class="hidden">
+    <label class="lbl">Extra recruiter keywords (comma separated). They add to the built-in list and raise the score.</label>
+    <textarea id="customTerms" placeholder="e.g. people partner, hiring manager, RPO"></textarea>
+    <div class="row"><button id="saveTerms" class="ghost">Save keywords</button></div>
+  </section>
+
+  <div id="statusBar" class="status"></div>
+  <footer>Reads only the page you are viewing. Data stays in this browser. You send messages yourself.</footer>
 
   <script src="popup.js"></script>
 </body>

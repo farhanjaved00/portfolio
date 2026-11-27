@@ -25,9 +25,11 @@
     return "";
   }
 
+  let extraTerms = [];
+
   function scoreHeadline(text) {
     const t = text.toLowerCase();
-    const hits = RECRUITER_TERMS.filter(term => t.includes(term));
+    const hits = RECRUITER_TERMS.concat(extraTerms).filter(term => t.includes(term));
     return { score: hits.length, hits };
   }
 
@@ -99,6 +101,7 @@
     }
     if (msg && msg.type === "SCAN_PAGE") {
       try {
+        extraTerms = Array.isArray(msg.terms) ? msg.terms : [];
         const onSearch = /linkedin\.com\/search\//.test(location.href);
         const people = extractCards();
         sendResponse({ ok: true, onSearch, count: people.length, people });
