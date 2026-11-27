@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "LinkedIn Recruiter Finder",
+  "version": "1.0.0",
+  "description": "Collects recruiters and talent-acquisition people from LinkedIn search results you are viewing, scores them, and exports a CSV.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["https://www.linkedin.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "LinkedIn Recruiter Finder"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

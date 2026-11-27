@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LinkedIn Recruiter Finder</title>
+  <style>
+    :root { --bg:#fff; --fg:#1b1f23; --muted:#65707a; --accent:#0a66c2; --line:#e3e7ec; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg:#1d2226; --fg:#e8ecef; --muted:#9aa5ae; --accent:#70b5f9; --line:#363d44; }
+    }
+    body { margin:0; width:420px; font:13px/1.4 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+    header { padding:12px 14px; border-bottom:1px solid var(--line); }
+    h1 { font-size:15px; margin:0; }
+    .row { display:flex; gap:8px; padding:10px 14px; align-items:center; flex-wrap:wrap; }
+    input[type=text] { flex:1; min-width:160px; padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:transparent; color:var(--fg); }
+    button { padding:6px 10px; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; }
+    button.ghost { background:transparent; color:var(--accent); }
+    .status { padding:0 14px 6px; color:var(--muted); min-height:16px; }
+    ul { list-style:none; margin:0; padding:0; max-height:380px; overflow:auto; }
+    li { padding:8px 14px; border-top:1px solid var(--line); }
+    li a { color:var(--accent); font-weight:600; text-decoration:none; }
+    .meta { color:var(--muted); font-size:12px; }
+    .badge { display:inline-block; font-size:11px; padding:1px 6px; border-radius:10px; background:var(--line); margin-left:4px; }
+    footer { padding:8px 14px; font-size:11px; color:var(--muted); border-top:1px solid var(--line); }
+  </style>
+</head>
+<body>
+  <header><h1>LinkedIn Recruiter Finder</h1></header>
+
+  <div class="row">
+    <input id="filter" type="text" placeholder="Filter by country / city (e.g. India, London, Remote)">
+    <label class="meta"><input id="minScore" type="number" min="0" max="10" value="1" style="width:46px"> min score</label>
+  </div>
+  <div class="row">
+    <button id="scan">Scan this LinkedIn page</button>
+    <button id="csv" class="ghost">Export CSV</button>
+    <button id="clear" class="ghost">Clear</button>
+  </div>
+  <div id="status" class="status">Open a LinkedIn People search, then click Scan.</div>
+  <ul id="list"></ul>
+  <footer>Reads only the page you are viewing. Results stay in this browser.</footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
