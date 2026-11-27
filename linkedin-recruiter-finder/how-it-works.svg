@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="system-ui, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#65707a"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="44" text-anchor="middle" font-size="24" font-weight="700" fill="#1b1f23">How LinkedIn Recruiter Finder works</text>
+  <text x="500" y="70" text-anchor="middle" font-size="14" fill="#65707a">Manual, page-by-page. Nothing runs unless you click.</text>
+
+  <!-- Step 1 -->
+  <rect x="30" y="130" width="190" height="150" rx="12" fill="#f6f8fa" stroke="#e3e7ec"/>
+  <text x="125" y="162" text-anchor="middle" font-size="13" font-weight="700" fill="#0a66c2">1  SEARCH</text>
+  <text x="125" y="190" text-anchor="middle" font-size="14" fill="#1b1f23">You open LinkedIn</text>
+  <text x="125" y="210" text-anchor="middle" font-size="14" fill="#1b1f23">People search for</text>
+  <text x="125" y="230" text-anchor="middle" font-size="14" fill="#1b1f23">"Technical Recruiter"</text>
+  <text x="125" y="256" text-anchor="middle" font-size="12" fill="#65707a">+ location filter</text>
+
+  <!-- Step 2 -->
+  <rect x="270" y="130" width="190" height="150" rx="12" fill="#f6f8fa" stroke="#e3e7ec"/>
+  <text x="365" y="162" text-anchor="middle" font-size="13" font-weight="700" fill="#0a66c2">2  SCAN</text>
+  <text x="365" y="190" text-anchor="middle" font-size="14" fill="#1b1f23">Content script reads</text>
+  <text x="365" y="210" text-anchor="middle" font-size="14" fill="#1b1f23">the visible result cards:</text>
+  <text x="365" y="230" text-anchor="middle" font-size="14" fill="#1b1f23">name, headline,</text>
+  <text x="365" y="250" text-anchor="middle" font-size="14" fill="#1b1f23">location, profile URL</text>
+
+  <!-- Step 3 -->
+  <rect x="510" y="130" width="190" height="150" rx="12" fill="#f6f8fa" stroke="#e3e7ec"/>
+  <text x="605" y="162" text-anchor="middle" font-size="13" font-weight="700" fill="#0a66c2">3  SCORE &amp; SAVE</text>
+  <text x="605" y="190" text-anchor="middle" font-size="14" fill="#1b1f23">Count recruiting terms</text>
+  <text x="605" y="210" text-anchor="middle" font-size="14" fill="#1b1f23">in the headline</text>
+  <text x="605" y="236" text-anchor="middle" font-size="12" fill="#65707a">stored in your browser,</text>
+  <text x="605" y="254" text-anchor="middle" font-size="12" fill="#65707a">merged by profile URL</text>
+
+  <!-- Step 4 -->
+  <rect x="750" y="130" width="220" height="150" rx="12" fill="#f6f8fa" stroke="#e3e7ec"/>
+  <text x="860" y="162" text-anchor="middle" font-size="13" font-weight="700" fill="#0a66c2">4  FILTER &amp; EXPORT</text>
+  <text x="860" y="190" text-anchor="middle" font-size="14" fill="#1b1f23">Filter by country</text>
+  <text x="860" y="210" text-anchor="middle" font-size="14" fill="#1b1f23">or minimum score</text>
+  <text x="860" y="236" text-anchor="middle" font-size="14" fill="#1b1f23">Export CSV</text>
+
+  <!-- arrows -->
+  <line x1="222" y1="205" x2="266" y2="205" stroke="#65707a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="462" y1="205" x2="506" y2="205" stroke="#65707a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="702" y1="205" x2="746" y2="205" stroke="#65707a" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Dashboard branch -->
+  <line x1="860" y1="282" x2="860" y2="340" stroke="#65707a" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="690" y="344" width="280" height="86" rx="12" fill="#e8f1fb" stroke="#0a66c2"/>
+  <text x="830" y="374" text-anchor="middle" font-size="14" font-weight="700" fill="#0a66c2">5  DASHBOARD</text>
+  <text x="830" y="396" text-anchor="middle" font-size="13" fill="#1b1f23">dashboard.html opens the CSV</text>
+  <text x="830" y="414" text-anchor="middle" font-size="13" fill="#1b1f23">and draws the charts</text>
+
+  <!-- Legend / notes -->
+  <rect x="30" y="330" width="620" height="110" rx="12" fill="#ffffff" stroke="#e3e7ec"/>
+  <text x="50" y="358" font-size="14" font-weight="700" fill="#1b1f23">What stays on your machine</text>
+  <text x="50" y="382" font-size="13" fill="#65707a">• Scanned results live in chrome.storage.local (this browser only).</text>
+  <text x="50" y="404" font-size="13" fill="#65707a">• The CSV and dashboard are local files; nothing is uploaded.</text>
+  <text x="50" y="426" font-size="13" fill="#65707a">• The extension never crawls, paginates, or messages anyone.</text>
+
+  <text x="500" y="530" text-anchor="middle" font-size="12" fill="#65707a">Repeat step 2 as you scroll your own results; duplicates are merged.</text>
+</svg>
